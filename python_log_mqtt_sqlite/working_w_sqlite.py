@@ -30,6 +30,9 @@ class DatabaseManager():
 		self.conn.commit()
 		return
 
+	def select_db_record(self, sql_query):
+		self.cur.execute(sql_query)
+		
 	def create_table(self, create_table_sql):
 		try:
 			self.cur.execute(create_table_sql)
@@ -58,8 +61,8 @@ def New_Table():
 #===============================================================
 # Functions to push Sensor Data into Database
 
-# Function to save Temperature to DB Table
-def Sensor_Data_Handler(jsonData):
+# Function to save to DB Table
+def Sensor_Data_Loger(jsonData):
 	""" 
 	use:Sensor_Data_Handler('{"SensorID":"54321", "Date":"01/20/2020", "Topic":"test/topic", "Message":"message"}')
 		jsonData = '{"SensorID":"54321", "Date":"01/20/2020", "Topic":"test/topic", "Message":"message"	}';
@@ -77,8 +80,22 @@ def Sensor_Data_Handler(jsonData):
 	del dbObj
 	print ("Inserted Sensor Data into Database.")
 
+# Function to read DB Table
+def Sensor_Data_Read():
+	
+	#select data from DB Table
+	dbObj = DatabaseManager()
+	dbObj.select_db_record("select Date_n_Time, Message from SensorData")
+	rows = dbObj.fetchall()
+	for row in rows:
+        print(row)
+	del dbObj
+	print ("Inserted Sensor Data into Database.")
+
+
 #================================================================
 #Main test 	
 New_Table()
 jsonData = '{"SensorID":"54321", "Date":"01/20/2020", "Topic":"test/topic", "Message":"message"	}';
-Sensor_Data_Handler(jsonData)
+Sensor_Data_Loger(jsonData)
+Sensor_Data_Read()
