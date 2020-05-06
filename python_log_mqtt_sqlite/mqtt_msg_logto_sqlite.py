@@ -14,7 +14,12 @@ import sqlite3
 import paho.mqtt.client as mqtt
 
 # SQLite DB Name
-DB_Name =  r"C:\Users\minhnt27\Downloads\sqlite\testDB.db"
+#DB_Name =  r"C:\Users\minhnt27\Downloads\sqlite\testDB.db"
+DB_Name =  r"D:\lab\sqlite\testDB.db"
+topic="test/topic"
+server="192.168.1.6"
+keepalive=60
+port=1883
 
 #===============================================================
 # Database Manager Class
@@ -42,6 +47,8 @@ class DatabaseManager():
 		self.conn.close()
 
 #===============================================================
+# Functions to interwork with SQLite
+
 # Functions to init Table
 def New_Table():
     sql_create_table = """ CREATE TABLE IF NOT EXISTS SensorData (
@@ -56,26 +63,24 @@ def New_Table():
     del dbObj
     print ("New table SensorData was created.")
 
-#===============================================================
-# Functions to interwork with SQLite
 
 # Function to save Sensor data to DB Table
 def Sensor_Data_Loger(jsonData):
-	""" use:Sensor_Data_Handler('{"SensorID":"54321", "Date":"01/20/2020", "Topic":"test/topic", "Message":"message"}')
-		jsonData = '{"SensorID":"54321", "Date":"01/20/2020", "Topic":"test/topic", "Message":"message"	}';
-	"""
-	#Parse Data 
-	json_Dict = json.loads(jsonData)
-	SensorID = json_Dict['SensorID']
-	Date_and_Time = json_Dict['Date']
-	Topic = json_Dict['Topic']
-	Message = json_Dict['Message']
-	
-	#Push into DB Table
-	dbObj = DatabaseManager()
-	dbObj.add_del_update_db_record("insert into SensorData (SensorID, Date_n_Time, Topic, Message) values (?,?,?,?)",[SensorID, Date_and_Time, Topic, Message])
-	del dbObj
-	print ("Inserted Sensor Data into Database.")
+    """ use:Sensor_Data_Handler('{"SensorID":"54321", "Date":"01/20/2020", "Topic":"test/topic", "Message":"message"}')
+        jsonData = '{"SensorID":"54321", "Date":"01/20/2020", "Topic":"test/topic", "Message":"message"	}';
+    """
+    #Parse Data 
+    json_Dict = json.loads(jsonData)
+    SensorID = json_Dict['SensorID']
+    Date_and_Time = json_Dict['Date']
+    Topic = json_Dict['Topic']
+    Message = json_Dict['Message']
+    
+    #Push into DB Table
+    dbObj = DatabaseManager()
+    dbObj.add_del_update_db_record("insert into SensorData (SensorID, Date_n_Time, Topic, Message) values (?,?,?,?)",[SensorID, Date_and_Time, Topic, Message])
+    del dbObj
+    print ("Inserted Sensor Data into Database.")
 
 
 #==============================================================
@@ -87,27 +92,28 @@ def on_connect(client, userdata, flags, rc):
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
-    client.subscribe("test/topic")
+    client.subscribe(topic)
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-	#print(dir(msg));
-	#for debug object message
-	print(str(msg.timestamp)+" "+msg.topic+" "+str(msg.payload))
-	
-	#Log to database - send a json format
-	dataset01={"SensorID":"12345", "Date":msg.timestamp, "Topic":msg.topic, "Message":str(msg.payload)}
-	json_dump = json.dumps(dataset01)
-	Sensor_Data_Loger(json_dump)
-
-	
+    #print(dir(msg));
+    #for debug object message
+    print(str(msg.timestamp)+" "+msg.topic+" "+str(msg.payload))
+    #Log to database - send a json format
+    dataset01 = {"SensorID":"12345", "Date":msg.timestamp, "Topic":msg.topic, "Message":str(msg.payload)}
+    json_dump = json.dumps(dataset01)
+    Sensor_Data_Loger(json_dump)
+    
 #===============================================================
+
+New_Table()
+
 # Main mqtt client works
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("test.mosquitto.org", 1883, 60)
+client.connect(server, port, keepalive)
 
 # Blocking call that processes network traffic, dispatches callbacks and
 # handles reconnecting.
