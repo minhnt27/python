@@ -1,11 +1,9 @@
 #------------------------------------------
-#--- This code to interworking with Sqlite database
+#--- This code to plot, get data from Sqlite database
 #--- Author: Minhnt27
-#--- Date: 6th May 2020
+#--- Date: 7th May 2020
 #--- Version: 1.0
 #--- Python Ver: 3.7
-#--- ref from: https://iotbytes.wordpress.com/store-mqtt-data-from-sensors-into-sql-database/
-#--- Sqlite install: https://freetuts.net/huong-dan-cai-dat-sqlite-1720.html
 #------------------------------------------
 
 import matplotlib.pyplot as plt
@@ -16,8 +14,8 @@ import json
 import sqlite3
 
 # SQLite DB Name
-#DB_Name =  r"C:\Users\minhnt27\Downloads\sqlite\testDB.db"
-DB_Name =  r"D:\lab\sqlite\testDB.db"
+DB_Name =  r"C:\Users\minhnt27\Downloads\sqlite\testDB.db"
+#DB_Name =  r"D:\lab\sqlite\testDB.db"
 
 #===============================================================
 # Database Manager Class
@@ -35,7 +33,9 @@ class DatabaseManager():
         return
 
     def select_db_record(self, sql_query):
-        results = self.cur.execute(sql_query)
+        self.cur.execute(sql_query)
+        results = self.cur.fetchall()
+        #fetchall() fetches all the rows of a query result. It returns all the rows as a list of tuples. An empty list is returned if there is no record to fetch
         return results
 
     def create_table(self, create_table_sql):
@@ -57,23 +57,25 @@ class DatabaseManager():
 #===============================================================
 # Functions to work with table SensorData
 
-# Function to read DB Table
-def Sensor_Data_Read():
-    dbObj = DatabaseManager()
-    results=dbObj.select_db_record("select Date_n_Time, Message from SensorData ORDER BY Date_n_Time DESC LIMIT 100;")
-    rows = results.fetchall()
-    #fetchall() fetches all the rows of a query result. It returns all the rows as a list of tuples. An empty list is returned if there is no record to fetch
-    return rows
+# Function to read last 100 record from Table
+def Sensor_Data_Read():	
+	#select data from DB Table
+	dbObj = DatabaseManager()
+	rows = dbObj.select_db_record("select Date_n_Time, Message from SensorData ORDER BY Date_n_Time DESC LIMIT 100;")
+	return rows
 
-
+# Function to plot animate
 def animate(i):
-    rows=Sensor_Data_Read()
     xs = []
     ys = []
+	
+	#append data to array
+	rows=Sensor_Data_Read()
     for row in rows:
-        xs.append(float(row[0]))
-        ys.append(random.randint(0,10))
+        xs.append(float((row[0])))
+        ys.append(float((row[1])))
 
+	#plot
     ax1.clear()
     ax1.plot(xs, ys)
     
@@ -85,5 +87,5 @@ style.use('fivethirtyeight')
 fig = plt.figure()
 ax1 = fig.add_subplot(1,1,1)
 
-ani = animation.FuncAnimation(fig, animate, interval=1000)
+ani = animation.FuncAnimation(fig, animate, interval=100)
 plt.show()
