@@ -12,6 +12,7 @@ from matplotlib import style
 import random
 import json
 import sqlite3
+import time
 
 # SQLite DB Name
 DB_Name =  r"C:\Users\minhnt27\Downloads\sqlite\testDB.db"
@@ -65,7 +66,7 @@ def Sensor_Data_Read():
 	return rows
 
 # Function to plot animate
-def animate(i):
+def updatefig(i):
     xs = []
     ys = []
 	
@@ -89,11 +90,30 @@ def animate(i):
     
 #================================================================
 #Main test 
-
+#The time() function returns the number of seconds passed since epoch
+start_time = time.time()
 style.use('fivethirtyeight')
 
 fig = plt.figure()
 ax1 = fig.add_subplot(1,1,1)
+try:
+    ani = animation.FuncAnimation(fig, updatefig, interval=100)
+    plt.show()
+except:
+    pass
+finally:
+    end_time = time.time() 
+    print("run time: "+ str(round((end_time-start_time)/(24*60*60),2))+" days")
+	
+	
+"""
+The try block lets you test a block of code for errors.
+The except block lets you handle the error.
+The finally block lets you execute code, regardless of the result of the try- and except blocks.
 
-ani = animation.FuncAnimation(fig, animate, interval=100)
-plt.show()
+The pass statement in Python is used when a statement is required syntactically but you do not want any command or code to execute.
+The pass statement is a null operation; nothing happens when it executes
+The break statement in Python terminates the current loop and resumes execution at the next statement
+The continue statement in Python returns the control to the beginning of the while loop. The continue statement rejects all the remaining statements in the current iteration of the loop and moves the control back to the top of the loop.
+
+"""
