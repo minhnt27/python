@@ -14,10 +14,13 @@ import sqlite3
 import paho.mqtt.client as mqtt
 
 # SQLite DB Name
-#DB_Name =  r"C:\Users\minhnt27\Downloads\sqlite\testDB.db"
-DB_Name =  r"D:\lab\sqlite\testDB.db"
+DB_Name =  r"C:\Users\minhnt27\Downloads\sqlite\testDB.db"
+#DB_Name =  r"D:\lab\sqlite\testDB.db"
 topic="test/topic"
-server="192.168.1.6"
+#server="192.168.1.6"
+#server="test.mosquitto.org"
+#server="iot.eclipse.org"
+server="broker.hivemq.com"
 keepalive=60
 port=1883
 
@@ -100,7 +103,7 @@ def on_message(client, userdata, msg):
     #for debug object message
     print(str(msg.timestamp)+" "+msg.topic+" "+str(msg.payload))
     #Log to database - send a json format
-    dataset01 = {"SensorID":"12345", "Date":msg.timestamp, "Topic":msg.topic, "Message":str(msg.payload)}
+    dataset01 = {"SensorID":"12345", "Date":msg.timestamp, "Topic":msg.topic, "Message":str(msg.payload.decode("UTF-8"))}
     json_dump = json.dumps(dataset01)
     Sensor_Data_Loger(json_dump)
     
