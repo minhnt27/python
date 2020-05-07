@@ -101,7 +101,7 @@ def Sensor_Data_Loger(jsonData):
 def Sensor_Data_Read():	
 	#select data from DB Table
 	dbObj = DatabaseManager()
-	rows = dbObj.select_db_record("select Date_n_Time, Message from SensorData")
+	rows = dbObj.select_db_record("select * from SensorData;")
 	return rows
 
 
