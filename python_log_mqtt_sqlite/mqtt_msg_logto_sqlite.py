@@ -104,6 +104,10 @@ def on_message(client, userdata, msg):
     print(str(msg.timestamp)+" "+msg.topic+" "+str(msg.payload))
     #Log to database - send a json format
     dataset01 = {"SensorID":"12345", "Date":msg.timestamp, "Topic":msg.topic, "Message":str(msg.payload.decode("UTF-8"))}
+	#The Python 3 documentation states: Bytes literals are always prefixed with 'b' or 'B'; they produce an instance of the bytes type instead of the str type. They may only contain ASCII characters; bytes with a numeric value of 128 or greater must be expressed with escapes
+    #str = '...' literals = a sequence of Unicode characters (UTF-16 or UTF-32, depending on how Python was compiled)
+    #bytes = b'...' literals = a sequence of octets (integers between 0 and 255). 
+	#And you can decode a bytes into a str
     json_dump = json.dumps(dataset01)
     Sensor_Data_Loger(json_dump)
     
