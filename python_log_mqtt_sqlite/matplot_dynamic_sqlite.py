@@ -70,15 +70,20 @@ def animate(i):
     ys = []
 	
 	#append data to array
-	rows=Sensor_Data_Read()
+    rows=Sensor_Data_Read()
     for row in rows:
         try:
-			xs.append(float((row[0])))
-			ys.append(float((row[1])))
-		except Exception as e:
+			#The strip() method returns a copy of the string by removing both the leading and the trailing characters string.strip([chars])
+            #check string empty. Empty strings are "falsy" which means they are considered false in a Boolean context. ref:https://www.tutorialspoint.com
+            if(row[0].strip() and row[1].strip()):
+                x=float(row[0])
+                y=float(row[1])
+                xs.append(x)
+                ys.append(y)
+        except Exception as e:
             pass
 
-	#plot
+    #plot
     ax1.clear()
     ax1.plot(xs, ys)
     
