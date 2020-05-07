@@ -13,8 +13,7 @@ import json
 import sqlite3
 
 # SQLite DB Name
-#DB_Name =  r"C:\Users\minhnt27\Downloads\sqlite\testDB.db"
-DB_Name =  r"D:\lab\sqlite\testDB.db"
+DB_Name =  r"C:\Users\minhnt27\Downloads\sqlite\testDB.db"
 
 #===============================================================
 # Database Manager Class
@@ -26,6 +25,7 @@ class DatabaseManager():
         self.conn.commit()
         self.cur = self.conn.cursor()
 
+        
     def add_del_update_db_record(self, sql_query, args=()):
         self.cur.execute(sql_query, args)
         self.conn.commit()
@@ -33,27 +33,30 @@ class DatabaseManager():
 
     def select_db_record(self, sql_query):
         self.cur.execute(sql_query)
+        results = self.cur.fetchall()
+        #fetchall() fetches all the rows of a query result. It returns all the rows as a list of tuples. An empty list is returned if there is no record to fetch
+        return results
 
     def create_table(self, create_table_sql):
         try:
             self.cur.execute(create_table_sql)
         except Exception as e:
             print(e)
-            
+
     def drop_table(self, drop_table_sql):
         try:
             self.cur.execute(drop_table_sql)
         except Exception as e:
             print(e)
-            
+
     def __del__(self):
         self.cur.close()
         self.conn.close()
 
 #===============================================================
-# Functions to work with DB
+# Functions to work with table SensorData
 
-# Function to init Table
+# Functions to init Table
 def New_Table():
     sql_create_table = """ CREATE TABLE IF NOT EXISTS SensorData (
                                         Id integer PRIMARY KEY NOT NULL,
@@ -67,8 +70,9 @@ def New_Table():
     del dbObj
     print ("New table SensorData was created.")
 
+# Functions to drop Table
 def Drop_Table():
-    sql_drop_table = """ DROP TABLE IF NOT EXISTS SensorData; """
+    sql_drop_table = """ DROP TABLE IF EXISTS SensorData; """
     dbObj = DatabaseManager()
     dbObj.drop_table(sql_drop_table)
     del dbObj
@@ -94,20 +98,23 @@ def Sensor_Data_Loger(jsonData):
 	print ("Inserted Sensor Data into Database.")
 
 # Function to read DB Table
-def Sensor_Data_Read():
-    dbObj = DatabaseManager()
-    results=dbObj.select_db_record("select * from SensorData;")
-    rows = results.fetchall()
-    #fetchall() fetches all the rows of a query result. It returns all the rows as a list of tuples. An empty list is returned if there is no record to fetch
-    return rows
+def Sensor_Data_Read():	
+	#select data from DB Table
+	dbObj = DatabaseManager()
+	rows = dbObj.select_db_record("select Date_n_Time, Message from SensorData")
+	return rows
 
 
 #================================================================
 #Main test 	
+#Create
 New_Table()
+#Write
 jsonData = '{"SensorID":"54321", "Date":"01/20/2020", "Topic":"test/topic", "Message":"message"	}';
 Sensor_Data_Loger(jsonData)
-rows=Sensor_Data_Read()
+#Read
+rows = Sensor_Data_Read()
 for row in rows:
     print(row)
+#Delete
 Drop_Table()
