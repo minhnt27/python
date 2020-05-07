@@ -72,8 +72,11 @@ def animate(i):
 	#append data to array
 	rows=Sensor_Data_Read()
     for row in rows:
-        xs.append(float((row[0])))
-        ys.append(float((row[1])))
+        try:
+			xs.append(float((row[0])))
+			ys.append(float((row[1])))
+		except Exception as e:
+            pass
 
 	#plot
     ax1.clear()
