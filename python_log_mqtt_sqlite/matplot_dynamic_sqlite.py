@@ -63,7 +63,7 @@ class DatabaseManager():
 def Sensor_Data_Read():	
 	#select data from DB Table
 	dbObj = DatabaseManager()
-	rows = dbObj.select_db_record("select Date_n_Time, Message from SensorData ORDER BY Date_n_Time DESC LIMIT 100;")
+	rows = dbObj.select_db_record("select Date_n_Time, Message from SensorData ORDER BY id DESC LIMIT 100;")
 	return rows
 
 # Function to plot animate
@@ -84,7 +84,7 @@ def updatefig(i):
                 xs.append(x)
                 ys.append(y)
         except Exception as e:
-			print ("update exception happen at: " + str(datetime.datetime.now()))
+            print ("update exception happen at " + str(datetime.datetime.now()) + ": (" + row[0] + "," + row[1] +")" )
             pass
 
     #plot
@@ -103,7 +103,7 @@ try:
     ani = animation.FuncAnimation(fig, updatefig, interval=100)
     plt.show()
 except:
-	print ("main program exception happen at: " + str(datetime.datetime.now()))
+    print ("main program exception happen at: " + str(datetime.datetime.now()))
     pass
 finally:
     end_time = time.time() 
