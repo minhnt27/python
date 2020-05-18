@@ -13,6 +13,7 @@ import random
 import json
 import sqlite3
 import time
+import datetime
 
 # SQLite DB Name
 DB_Name =  r"C:\Users\minhnt27\Downloads\sqlite\testDB.db"
@@ -66,6 +67,7 @@ def Sensor_Data_Read():
 	return rows
 
 # Function to plot animate
+# Here i represents the index of the frame in the animation. With this index you can select the data range which should be visible in this frame
 def updatefig(i):
     xs = []
     ys = []
@@ -82,6 +84,7 @@ def updatefig(i):
                 xs.append(x)
                 ys.append(y)
         except Exception as e:
+			print ("update exception happen at: " + str(datetime.datetime.now()))
             pass
 
     #plot
@@ -100,6 +103,7 @@ try:
     ani = animation.FuncAnimation(fig, updatefig, interval=100)
     plt.show()
 except:
+	print ("main program exception happen at: " + str(datetime.datetime.now()))
     pass
 finally:
     end_time = time.time() 
