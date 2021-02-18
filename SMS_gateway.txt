@@ -1,0 +1,62 @@
+
+ATD0963500050; dial number
+
+ATDL dial last number
+
+ATE1 echoON
+
+https://www.developershome.com/sms/howToReceiveSMSUsingPC.asp
+
+AT+CMGF=1
+OK
+
+AT+CMGL="ALL"
++CMGL: 1,"REC UNREAD","155",,"21/02/18,15:50:53+28"
+ <VIETTEL > Quy Khach vua dau noi thanh cong, phi dich vu la: 50,000 VND. Tran trong
++CMGL: 2,"REC UNREAD","195",,"21/02/18,15:51:51+28"
+ien phi). Xin cam on!
++CMGL: 3,"REC UNREAD","195",,"21/02/18,15:51:51+28"
+Chao mung quy khach den voi dich vu tra truoc cua Viettel. Tai khoan cua Quy khach la 0 dong. Quy khach thao tac *101#, an OK de kiem
++CMGL: 4,"REC UNREAD","195",,"21/02/18,15:51:51+28"
+tra tai khoan. De kiem tra thong tin chu thue bao, Quy khach vui long truy cap http://vietteltelecom.vn hoac soan tin TTTB gui 1414 (m
+
+OK
+
+AT+CMGL="ALL"
++CMGL: 1,"REC READ","155",,"21/02/18,15:50:53+28"
+ <VIETTEL > Quy Khach vua dau noi thanh cong, phi dich vu la: 50,000 VND. Tran trong
++CMGL: 2,"REC READ","195",,"21/02/18,15:51:51+28"
+ien phi). Xin cam on!
++CMGL: 3,"REC READ","195",,"21/02/18,15:51:51+28"
+Chao mung quy khach den voi dich vu tra truoc cua Viettel. Tai khoan cua Quy khach la 0 dong. Quy khach thao tac *101#, an OK de kiem
++CMGL: 4,"REC READ","195",,"21/02/18,15:51:51+28"
+tra tai khoan. De kiem tra thong tin chu thue bao, Quy khach vui long truy cap http://vietteltelecom.vn hoac soan tin TTTB gui 1414 (m
+
+OK
+
+AT+CMGR=1
++CMGR: "REC READ","155",,"21/02/18,15:50:53+28"
+ <VIETTEL > Quy Khach vua dau noi thanh cong, phi dich vu la: 50,000 VND. Tran trong
+
+OK
+
+
+https://www.developershome.com/sms/howToSendSMSFromPC.asp
+
+AT+CMGW="0963500050"
+> abc
+> ;
+> .
+>[Nhan Ctr+z de exit]
++CMGW: 5	->vi tri SMS
+
+OK
+AT+CMSS=5
++CMSS: 1
+
+OK
+
+
+
+
+
