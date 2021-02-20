@@ -1,0 +1,5 @@
+https://stackoverflow.com/questions/15433188/r-n-r-and-n-what-is-the-difference-between-them
+
+\r = CR (Trả về vận chuyển) → Được sử dụng làm ký tự dòng mới trong Mac OS trước X
+\n = LF (Nguồn cấp dữ liệu) → Được sử dụng làm ký tự dòng mới trong Unix / Mac OS X
+\r\n = CR + LF → Được sử dụng làm ký tự dòng mới trong Windows
