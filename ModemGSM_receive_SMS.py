@@ -4,7 +4,8 @@ import re
 from pprint import pprint
 class TextMessage:
     def connectPhone(self):
-        self.ser = serial.Serial(port='COM4', baudrate=115200, bytesize=serial.SEVENBITS, parity=serial.PARITY_EVEN, stopbits=1, timeout=5, dsrdtr=True) #for mine this was ttyUSB0 but could be ttyUSB1 etc. good idea to runs ls usb and find out that way
+        #update the COM port, others should not change for SR2MOD02
+        self.ser = serial.Serial(port='COM4', baudrate=115200, bytesize=serial.SEVENBITS, parity=serial.PARITY_EVEN, stopbits=1, timeout=5, dsrdtr=True) 
         time.sleep(1)
 
     def list(self):
@@ -47,16 +48,20 @@ class TextMessage:
 try:
     sms = TextMessage()
     sms.connectPhone()
+    
+    #print all sms info
     result=sms.list()
     pprint(result)
+    
+    #print the last sms
     count=len(result)
     if count>0:
         lastmsg=result[count-1]
         header=lastmsg[0]
-        #print(lastmsg)
-        #print(header)
         idmsg=str(header).split(":")
         sms.read(idmsg=idmsg[1].strip())
+    
+    #delete all sms
     sms.delAll()
 finally:
     if sms:
