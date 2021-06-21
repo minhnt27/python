@@ -2,6 +2,7 @@ import serial
 import time
 import re
 from pprint import pprint
+
 class TextMessage:
     def connectPhone(self):
         #update the COM port, others should not change for SR2MOD02

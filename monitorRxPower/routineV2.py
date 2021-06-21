@@ -97,7 +97,7 @@ def telnet(Host, user,password):
 def connect():
     """ Connect to MySQL database """
     try:
-        conn = mysql.connector.connect(host='localhost',database='autotester',user='root', password='')
+        conn = mysql.connector.connect(host='localhost',database='autotester',user='root', password='Tthht@123')
         #if conn.is_connected():
         #    print('Connected to MySQL database\n')
     except Error as e:
